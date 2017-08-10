@@ -1,0 +1,92 @@
+ ``EDGE++''
+============
+
+Last update: 21.12.2016
+
+Language: C++
+
+Libraries: Eigen (required), MKL (optional)
+
+Keywords: edge states; spectral function; self-energy; mixed boundary conditions;
+          cylinders; Wannier functions; tight-binding Hamiltonian; wannier90;
+
+What the code can do:
+    1. Calculate band structures / DOS / A(w) / A(w,k) for a TB Hamiltonian in the wannier90 format 
+    2. Calculate Z2 invariants (3D TB Ham.) and Chern numbers (2D TB Ham.)
+    3. Calculate A(w) and A(w,k) for Hamiltonians supplemented with a self-energy
+    4. Calculate edge A(w,k) for Hamiltonians supplemented with a self-energy
+
+How to run the code:
+    ./edge.o --goal <goal> config-file hr-file siw-file kpoints-file
+
+    Possible goals are:
+        'bs'    --- band structure
+        'dos'   --- density of states
+        'Aw'    --- spectral function
+        'Awk'   --- k-resolved spectral function
+            'Awkverbose' --- prints A(w,k) and atom/orbital/spin-resolved contributions
+                             from the top and the bottom edge of the cylinder (for OBC).
+            The goals 'Awkedge[T/B][U/D]' are deprecated, use 'Awkverbose' instead.
+        'chern' --- Chern numbers 
+                    // currently, only 2D Hamiltonians (in the kx-ky plane)
+        'Z2'    --- Z2 invariants
+
+    The program reads four input files: 
+
+        1. `config-file` contains the following parameters:
+            1.1 number of orbitals per cell
+            1.2 number of cells per cylinder
+            1.3 boundary conditions: 'p' for periodic, 'o' for open
+            1.4 minimal frequency
+            1.5 maximal frequency
+            1.6 number of frequencies
+            1.7 energy cutoff for H(i,j) matrix elements
+            1.8 distance cutoff for H(i,j) matrix elements
+            1.9 imaginary delta (needed if the self-energy is real)
+            WARNING: The current version of the code reads the values from
+                    the first 14 characters of each line.
+
+	2. `hr-file` with the Hamiltonian in the wannier90 format (case_hr.dat),
+           preceded by the lattice constants and the coordinates of Wannier centers.  
+           WARNING: The current version of the code reads the values from
+                    particular positions, i.e. it is sensitive to spaces.
+
+	3. `siw-file` contains the real and imaginary parts of the self-energy
+            for each frequency and each orbital:
+                w Re(Sigma_1[w]) Im(Sigma_1[w]) Re(Sigma_2[w]) Im(Sigma_2[w]) ...
+            WARNING: In the current version, this file has to be provided even if self-energy
+                     is not used.  To generate this file, the script `create_zero_siw.py`
+                     can be used.
+            WARNING: Moreover, the number of columns in this file should be strictly
+                     2*norb + 1, where `norb` is the number in the first line of the config file.
+
+	4. `kpoints-file` contains the k-mesh in the wien2k format.  For Z2 or
+	   Chern number calculations, the information on the neighboring
+	   k-points is required.  Hence, each entry in the `kpoints-file` is
+           supplemented with two additional columns (index of the right- and the
+           top-neighbor for a given k-point).  These can be generated with:
+
+                    create_2D_k_mesh_with_neighbors.py  (for Chern numbers)
+                    create_k_mesh_with_neighbors.py (for Z2 invariants)
+
+           WARNING: The current version of the code reads the values from
+                    particular positions, i.e. it is sensitive to spaces.
+
+
+Bugs and development:
+	17.02.2016 --- Bug in the definition of self-energy
+	15.04.2016 --- (j,i) instead of (i,j) when saving eigenvectors (chern)
+	20.04.2016 --- complex-valued t_ij are now included (before it was only Re[t_ij])
+	26.04.2016 --- printed eigenvalues: now increased precision
+	29.04.2016 --- plot sites + couplings in the svg format
+	31.05.2016 --- added "Awkedge[T/B][U/D]"
+	02.06.2016 --- added "Awkverbose"
+        06.09.2016 --- changed the Fourier transform to e^ik.R
+        16.10.2016 --- added Z2 invariant calculation (2D, only)
+        11.11.2016 --- fixed bug in the "create_2D_k_mesh_with_neighbors.py"
+                       script (Ny neighbors for the Z2 case were wrong)
+        21.12.2016 --- added a workaround for the case of non-orthogonal
+                       basis vectors of the Brillouin zone.  Orthogonality
+                       is enforced and the vectors are scaled by the parameter
+                       given.  If the line is empty, the usual procedure is used.
+

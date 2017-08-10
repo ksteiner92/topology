@@ -1,0 +1,87 @@
+\usepackage[utf8]{inputenc} % Richtiges anzeigen von Umlauten und quasi allen anderen Schriftzeichen
+\usepackage[T1]{fontenc} % Wichtig für alles was mehr als ASCII verwendet
+%\usepackage[sc]{mathpazo} % Use the Palatino font
+\usepackage{upgreek}
+\usepackage{csquotes} % Schöne Anführungsstriche mit \enquote{Text}
+\usepackage{amsmath} % Bessere und schönere mathematische Formeln
+\usepackage{mathtools} % Noch schönerere mathematische Formeln
+\usepackage{amstext} % \text{} Macro in mathematischen Formeln
+\usepackage{amsfonts} % Erweiterte Zeichensätze für mathematische Formeln
+\usepackage{amssymb} % Spezielle mathematische Symbole.
+\usepackage{array} % Matrizen in mathematischen Formeln
+\usepackage{textcomp} % Für textmu und textohm etc. um im Fließtext keine Mathematik 
+\usepackage{textalpha} % Damit können griechische Zeichen direkt im Text verwendet werden (siehe zeichen.txt)
+\usepackage{paralist} % Für compactitem und compactenum
+\usepackage{braket} % Für das quantenmechanische Bra-Ket
+%\usepackage{geometry} % Seitenränder und Seiteneigenschaften setzen
+\usepackage[bottom]{footmisc} % Zwingt Fußnoten an das Ende der Seite
+\usepackage[pdftex]{hyperref} % Links richtig anzeigen. Sowohl innerhalb des Dokuments (Fußzeilen, Formeln), als auch ins Internet
+\usepackage[ % Biblatex für die Zitate und Referenzen
+	backend=bibtex,
+	hyperref=true
+		]{biblatex}
+\addbibresource{ref.bib}
+\usepackage{graphicx} % Wichtig für das Einbinden von Grafiken
+\usepackage{caption}
+\usepackage{subcaption} % Einbinden von mehreren Grafiken in einer figure
+\usepackage{float}
+\usepackage{cleveref}
+\usepackage{graphicx}  
+\usepackage{txfonts}  
+\usepackage{epstopdf}
+\usepackage[miktex]{gnuplottex} % for MiKTeX,`pdflatex -shell-escape` enabled 
+\usepackage{fancyhdr}
+\usepackage[overload]{empheq}
+\usepackage{ulem}
+\usepackage{dsfont}
+\usepackage{mathtools, cuted}
+\usepackage{siunitx} % advanced unit package
+\usepackage{titling}
+%\usepackage[hmarginratio=1:1,top=10mm,left=12mm, right=12mm, bottom=18mm,columnsep=10pt]{geometry} % Document margins
+%\usepackage[hmarginratio=1:1,left=28mm, right=28mm,]{geometry}
+%\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
+\usepackage{afterpage}
+\usepackage{bm}
+\usepackage[toc,page]{appendix}
+\usepackage{titlesec}
+
+
+\newcommand{\csubref}[2]{\namecref{#1}~\subref{#1:#2}}
+%\renewcommand\thesection{\Roman{section}} % Roman numerals for the sections
+%\renewcommand\thesubsection{\roman{subsection}} % roman numerals for subsections
+%\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
+%\titleformat{\subsection}[block]{\large}{\thesubsection.}{1em}{} % Change the look of the section titles
+\titleformat{\chapter}{\normalfont\large\bf}{\thechapter.}{18pt}{\huge\bf}
+
+
+\usepackage{abstract} % Allows abstract customization
+\usepackage{blindtext} % Package to generate dummy text throughout this template
+
+\usepackage{fontspec}
+\newtheorem{theorem}{Theorem}
+%\setmainfont{Verdana}
+
+\renewcommand{\abstractnamefont}{\normalfont\bfseries} % Set the "Abstract" text to bold
+\renewcommand{\abstracttextfont}{\normalfont\small\itshape} % Set the abstract itself to small italic
+
+\newcommand*{\widebox}[2][0.5em]{\fbox{\hspace{#1}$\displaystyle #2$\hspace{#1}}}
+\newcommand\eqquest{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily ?}}}{=}}}
+\newcommand{\pound}{\operatornamewithlimits{\#}}
+
+\DeclareSIUnit{\calorie}{cal}
+\DeclareSIUnit{\Calorie}{\kilo\calorie}
+\sisetup{detect-all}
+
+\captionsetup[figure]{font=small,labelfont=small}
+
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[L]{\small \leftmark}
+\fancyhead[R]{\small \rightmark}
+
+\hypersetup{ % Setzt einige Werte die in den Eigenschaften des PDF gespeichert sind.
+	pdfauthor = {Klaus Steiner},
+	pdftitle = {Topology},
+	pdfdisplaydoctitle = true,
+	colorlinks = false, % Für Druck auf "false" setzen!
+}

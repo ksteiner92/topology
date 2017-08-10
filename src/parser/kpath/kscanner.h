@@ -1,0 +1,51 @@
+#ifndef KSCANNER_H
+#define KSCANNER_H
+
+//#define yyFlexLexer KPathFlexLexer
+//#include <FlexLexer.h>
+//#undef yyFlexLexer
+
+/**
+ * Generated Flex class name is yyFlexLexer by default. If we want to use more flex-generated
+ * classes we should name them differently. See scanner.l prefix option.
+ * 
+ * Unfortunately the implementation relies on this trick with redefining class name
+ * with a preprocessor macro. See GNU Flex manual, "Generating C++ Scanners" section
+ */
+//#ifndef __FLEX_LEXER_H
+#undef yyFlexLexer
+#define yyFlexLexer KFlexLexer
+
+#include <FlexLexer.h>
+//#endif
+// Scanner method signature is defined by this macro. Original yylex() returns int.
+// Sinice Bison 3 uses symbol_type, we must change returned type. We also rename it
+// to something sane, since you cannot overload return type.
+#undef YY_DECL
+#define YY_DECL ks_k::KPathParser::symbol_type ks_k::KPathScanner::getNextToken()
+
+#include "kparser.hh" // this is needed for symbol_type
+
+namespace ks_k {
+
+// Forward declare interpreter to avoid include. Header is added inimplementation file.
+class KPath;
+
+class KPathScanner : public KFlexLexer {
+public:
+   KPathScanner(KPath &driver) :
+           driver(driver) {
+   }
+
+   virtual ~KPathScanner() {
+   }
+
+   virtual ks_k::KPathParser::symbol_type getNextToken();
+
+private:
+   KPath &driver;
+};
+
+}
+
+#endif
