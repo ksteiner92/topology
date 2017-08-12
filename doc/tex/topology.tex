@@ -432,6 +432,143 @@ the edge states but the system remains topological.
 \chapter{Tight Binding Model}\label{a:tb}
 \chapter{Program}\label{a:program}
 
+The program was written in a modern C++ and focuses on easy extendability for adding new calculation routines by defining new models and quantities
+in the source code. The basis is the
+tight-binding model and the program requires a Hamiltonian file as input and also the dimension and boundary conditions of
+the system. This can be configured in the configuration file described in \Cref{s:config-file}. The code of the program can
+handle arbitrary dimensions but currently only dimensions from 1 to 3 are implemented. This is possible through the generic
+design pattern where the dimension of the system is given as template class parameters. To start a calculation, the program 
+needs as argument a goal which is the model name it should evaluate and the path to the configuration file. A third parameter
+is optional and is the path to the output file. If no output file is specified the standard output stream is used. This could
+be useful if the whole program output including calculation results should be piped into one file. 
+
+\section{Configuration File}\label{s:config-file}
+
+The configuration file has a JSON-like/C-like style which allows to define also nested structures. The file must contain a path
+to the tight-binding Hamiltonian in Wannier90 format and information about dimension and boundary conditions. Depending which
+model is called different additional configurations are required. An example of the mandatory configuration blocks is given below
+which every valid configuration has to include. The Hamiltonian is read from the file \texttt{graphene.dat} and a 2 dimensional 
+system with open and periodic boundary conditions and size $1\times50$ in units of unit cells is defined.
+\lstset{language=C++,
+                basicstyle=\fontsize{8}{8}\ttfamily,
+                keywordstyle=\color{blue}\ttfamily,
+                stringstyle=\color{red}\ttfamily,
+                commentstyle=\color{green}\ttfamily,
+                morecomment=[l][\color{magenta}]{\#}
+                backgroundcolor=\color{gray},
+                language=C
+}
+\begin{lstlisting}[frame=single] 
+/**
+ * Tight-Binding Hamiltonian (mandatory)
+ * -------------------------------------
+ * this must be a valid file path
+ */
+ hr = "graphene.dat";
+ 
+/**
+ *       Real Space Grid (mandatory)
+ * --------------------------------------
+ * Here the dimension and size of the system are defined.
+ * Currently dimensions from 1 - 3 are supported and have
+ * the names x, y and z respectively. For every direction
+ * the size dim and the boundary condition bc can be
+ * specified.
+ */
+rgrid = {
+    x = {\pm
+        dim = 1;
+        //periodic boundary condition
+        bc = "p";
+    }
+    y = {
+        dim = 50;
+        //open boundary condition
+        bc = "o";
+    }
+}
+\end{lstlisting}
+In the same way \texttt{C/C++} does not require line breaks and tabulators because these are only formatting characters, the
+syntax also requires only semicolons for assignments endings and curly brackets to enclose object definitions.
+The keywords in the given example are defined in the code and must be matched if new configurations are made. Some models
+need as input a k-path. This can be defined in the following way
+\begin{lstlisting}[frame=single] 
+ ...
+ /**
+ *           k-Path (optional)
+ * --------------------------------------
+ * Again here are different options possible:
+ * (1) input file. The program supports paths created
+ * with xcrysden.
+ * (2) defining symmetry points and the path between
+ * those. Here the 'dens' parameter are the number of
+ * points between two symmetry points. The 'path' parameter
+ * defines the path. Every symmetry point is defined as
+ * an object with parameters kx, ky and kz. The default value
+ * for these is zero, so if some of these are not defined
+ * there are set to zero.
+ */
+//kpath = "...";    // option (1)
+kpath = {           // option (2)
+    dens = 100;
+    path = "G-M-G";
+    G = {
+        kx = 0;
+        ky = 0;
+        kz = 0;
+    }
+    M = {
+        kx = 1/2;
+        ky = 0;
+        kz = 0;
+    }
+    Q = {
+        kx = 1/3;
+    }
+}
+\end{lstlisting}
+The \texttt{kpath} keyword can either be set to a file path in format of the xcrysden k-path
+file format or a path can be defined by symmetry points and a density factor. In a similar way
+a self energy input can be defined
+\begin{lstlisting}[frame=single] 
+/**
+ *      Bulk Self Energy (optional)
+ * -------------------------------------
+ *  (1) This can be either a path to a file
+ * where the file must have the follwing colums:
+ * # energy | Re(sigma) 1 | Imag(sigma) 1 | | Re(sigma) 2 | Imag(sigma) 2 | ...
+ *   ...
+ * where the numbers in the names denote the atoms. So for every atome there
+ * is one real and imaginary self energy value.
+ * (2) Self
+ */
+//sw = "...";       // option (1)
+sw = {              // option (2)
+    dens = 1000;
+    w_min = -12;
+    w_max = 12;
+    U = 1;
+    delta = 0.01;
+    sigma = "iso";    // example for sub option (1)
+    //sigma = -0.01i  // example for sub option (2)
+}
+\end{lstlisting}
+Currently supported models are 
+\begin{enumerate}
+ \item \text{Bandstructure} \texttt{--goal bs}
+ \item \text{Density of States} \texttt{--goal dos}
+ \item \text{Spectral Function} \texttt{--goal Aw/Awk/AwEdge}
+ \item \text{Chern Number} \texttt{--goal chern}
+ \item \text{Z2 Invariant} \texttt{--goal Z2}
+\end{enumerate}
+
+
+\subsection{}
+
+
+
+\section{Extending the Code}
+
 \printbibliography
 
 \end{document}
