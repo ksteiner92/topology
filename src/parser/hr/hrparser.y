@@ -1,26 +1,29 @@
+/**
+ * This file is part of toplogy.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 %skeleton "lalr1.cc" /* -*- C++ -*- */
 %require "3.0"
 %defines
-%
-define parser_class_name{HamiltonParser}
-
-%
-define api
-.token.constructor
-%
-define api
-.value.
-type variant
-%
-define parse
-.assert
-%
-define api
-.
-namespace { ks_hr }
-%
-code requires
-        {
+%define parser_class_name{HamiltonParser}
+%define api.token.constructor
+%define api.value.type variant
+%define parse.assert
+%define api.namespace { ks_hr }
+%code requires {
 #include <iostream>
 
 #include <string>
@@ -42,9 +45,8 @@ code requires
 // We define this function here (function! not method).
 // This function is called only inside Bison, so we make it static to limit symbol visibility for the linker
 // to avoid potential linking conflicts.
-%
-code top
-        {
+%code top {
+
 #include <iostream>
 #include "hrscanner.h"
 
@@ -54,98 +56,59 @@ code top
 #include "Eigen/Eigenvalues"
 #include "Eigen/Dense"
 
-                // yylex() arguments are defined in parser.y
-                static ks_hr::HamiltonParser::symbol_type yylex(ks_hr::HamiltonScanner &scanner, ks_hr::TightBindingHamiltonian &driver) {
-                   return scanner.getNextToken();
-                }
+   // yylex() arguments are defined in parser.y
+   static ks_hr::HamiltonParser::symbol_type yylex(ks_hr::HamiltonScanner &scanner, ks_hr::TightBindingHamiltonian &driver) {
+           return scanner.getNextToken();
+   }
 
-                // you can accomplish the same thing by inlining the code using preprocessor
-                // x and y are same as in above static function
-                // #define yylex(x, y) scanner.get_next_token()
+   // you can accomplish the same thing by inlining the code using preprocessor
+   // x and y are same as in above static function
+   // #define yylex(x, y) scanner.get_next_token()
 
-                using namespace ks_hr;
-        }
+   using namespace ks_hr;
+}
 
-%lex-param {
-ks_hr::HamiltonScanner &scanner
-}
-%lex-param {
-ks_hr::TightBindingHamiltonian &driver
-}
-%parse-param {
-ks_hr::HamiltonScanner &scanner
-}
-%parse-param {
-ks_hr::TightBindingHamiltonian &driver
-}
+%lex-param {ks_hr::HamiltonScanner &scanner}
+%lex-param { ks_hr::TightBindingHamiltonian &driver}
+%parse-param { ks_hr::HamiltonScanner &scanner}
+%parse-param { ks_hr::TightBindingHamiltonian &driver}
 %locations
-%
-define parse
-.trace
-%
-define parse
-.
-error verbose
+%define parse.trace
+%define parse.error verbose
 
-%
-define api
-.token.prefix {
-TOKEN_}
+%define api.token.prefix { TOKEN_}
 
-%
-token END
-0 "end of file"
-%
-token <std::string> STRING
-"string";
-%
-token<double> FLOAT
-"float";
-%
-token<long> INT
-"int"
-%
-token <Eigen::Vector3d> VECTOR
-"vector"
-%
-token EOL
-"end of line"
+%token END 0 "end of file"
+%token <std::string> STRING "string";
+%token<double> FLOAT "float";
+%token<long> INT "int"
+%token <Eigen::Vector3d> VECTOR "vector"
+%token EOL "end of line"
 
-%
-type <Eigen::Vector3d> vector;
+%type <Eigen::Vector3d> vector;
 
-%
-start start
+%start start
 
 %%
 
 start:
-|
-start line;
+   |start line;
 
 line: EOL
-|
-exp EOL;
+      | exp EOL;
 
-exp: vector
-|
-hrline
+exp:  vector
+      | hrline
 
-        hrline:
-FLOAT FLOAT
-FLOAT FLOAT
-FLOAT FLOAT
-FLOAT {
-const std::complex<double> t($6, $7);
-driver.setEnergy((
-int) $1, (int) $2, (int) $3, (unsigned int) $4, (unsigned int) $5, t);
+hrline: FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT FLOAT {
+   const std::complex<double> t($6, $7);
+   driver.setEnergy((int) $1, (int) $2, (int) $3, (unsigned int) $4, (unsigned int) $5, t);
 };
 
-vector: FLOAT
-FLOAT FLOAT{
+vector: FLOAT FLOAT FLOAT {
         $$ = Eigen::Vector3d($1, $2, $3);
         if (!driver.addLatticeVector($$))
-        driver.addAtom($$);
+         driver.addAtom($$);
 };
 
 %%
