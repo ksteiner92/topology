@@ -40,7 +40,7 @@
 #ifndef YY_YY_HOME_KLAUS_DEV_EDGE_SRC_PARSER_KPATH_KPARSER_HH_INCLUDED
 # define YY_YY_HOME_KLAUS_DEV_EDGE_SRC_PARSER_KPATH_KPARSER_HH_INCLUDED
 // //                    "%code requires" blocks.
-#line 10 "/home/klaus/dev/edge/src/parser/kpath/kparser.y" // lalr1.cc:377
+#line 27 "/home/klaus/dev/edge/src/parser/kpath/kparser.y" // lalr1.cc:377
 
     #include <iostream>
     #include <string>
@@ -131,7 +131,7 @@
 # define YYDEBUG 1
 #endif
 
-#line 8 "/home/klaus/dev/edge/src/parser/kpath/kparser.y" // lalr1.cc:377
+#line 25 "/home/klaus/dev/edge/src/parser/kpath/kparser.y" // lalr1.cc:377
 namespace  ks_k  {
 #line 137 "/home/klaus/dev/edge/src/parser/kpath/kparser.hh" // lalr1.cc:377
 
@@ -1000,7 +1000,7 @@ namespace  ks_k  {
   }
 
 
-#line 8 "/home/klaus/dev/edge/src/parser/kpath/kparser.y" // lalr1.cc:377
+#line 25 "/home/klaus/dev/edge/src/parser/kpath/kparser.y" // lalr1.cc:377
 } //  ks_k 
 #line 1006 "/home/klaus/dev/edge/src/parser/kpath/kparser.hh" // lalr1.cc:377
 
