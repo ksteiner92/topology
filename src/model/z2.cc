@@ -40,7 +40,7 @@ template<size_t Dim> Z2Model<Dim>::Z2Model() {
 }
 
 template<size_t Dim> const complex<double> Z2Model<Dim>::U(
-        Eigen::MatrixXcd &V, Eigen::MatrixXcd &V_mu,
+        MatrixXcd &V, MatrixXcd &V_mu,
         const size_t band) const {
    MatrixXcd psi = V.block(0, band, super::num_atoms, 2);
    const MatrixXcd psi1 = V_mu.block(0, band, super::num_atoms, 2);

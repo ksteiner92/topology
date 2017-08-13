@@ -67,15 +67,12 @@ template<size_t Dim> void DensityOfStatesModel<Dim>::operator()(
    for (size_t i = 0; i < (num_energies - 1); i++) {
       const double w1 = sw->getEnergyAt(i);
       const double w2 = sw->getEnergyAt(i + 1);
-      long ecount = count_if(wk.begin(), wk.end(), [w1, w2](double j) { return (j < w2) && (w1 <= j); });
-      dos.insert(
-              pair<double, double>(w1,
-                                   (double) num_energies * ecount / (num_kpoints + 1)
+      const long ecount = count_if(wk.begin(), wk.end(), [w1, w2](double j) { return (j < w2) && (w1 <= j); });
+      dos.insert(make_pair(w1, (double) num_energies * ecount / (num_kpoints + 1)
                                    / size / (wmax - wmin)));
    }
    for (const auto dosk : dos)
       output << dosk.first << " " << dosk.second << endl;
-
 }
 
 REGISTER_MODEL_ALL_DIMS(DensityOfStatesModel, dos)
