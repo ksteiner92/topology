@@ -78,6 +78,10 @@ int main(int argc, char **argv) {
       cerr << "Model " << goal << " does not exist." << endl;
       return 1;
    }
+   if (!model->init(QuantityHandler::get())) {
+      LOG_ERR << "Model " << goal << "could not be initialized.";
+      return 1;
+   }
    //cout << "Running model " << model->getName() << "..." << endl;
    LOG_INFO << "Running model " << model->getName() << "...";
    ostream *output = &cout;

@@ -45,9 +45,9 @@ namespace ks {
 template<size_t Dim> class BandStructureModel : public Model {
 MODEL(BandStructureModel)
 public:
-   BandStructureModel();
-
    virtual ~BandStructureModel();
+
+   virtual bool init(QuantityHandler* quanHandler) override;
 
    void operator()(std::ostream &output) override;
 
@@ -62,9 +62,9 @@ template<size_t Dim> class RealSwBandStructureModel : public BandStructureModel<
 MODEL(RealSwBandStructureModel)
    typedef BandStructureModel<Dim> super;
 public:
-   RealSwBandStructureModel();
-
    ~RealSwBandStructureModel() override;
+
+   bool init(QuantityHandler* quanHandler) override;
 
    void operator()(std::ostream &output) override;
 

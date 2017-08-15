@@ -33,9 +33,6 @@ class QuantityBase {
    friend class QuantityHandler;
 
 public:
-   virtual ~QuantityBase() {
-   }
-
    virtual bool init(ks_conf::Config *config) = 0;
 
    const std::string getName() const {
@@ -47,9 +44,6 @@ protected:
 };
 
 template<class T> class Quantity : public QuantityBase {
-   struct Deleter {
-
-   };
 public:
    virtual T get() const {
       return value;

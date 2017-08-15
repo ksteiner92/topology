@@ -35,28 +35,28 @@ namespace ks {
 
 class SelfEnergyQuantity : public Quantity<SelfEnergyBase *> {
 public:
-   ~SelfEnergyQuantity() override;
+   ~SelfEnergyQuantity();
 
    bool init(ks_conf::Config *config) override;
 };
 
 class TightBindingHamiltonianQuantity : public Quantity<ks_hr::TightBindingHamiltonian *> {
 public:
-   ~TightBindingHamiltonianQuantity() override;
+   ~TightBindingHamiltonianQuantity();
 
    bool init(ks_conf::Config *config) override;
 };
 
 class RealGridQuantity : public Quantity<RealGrid *> {
 public:
-   ~RealGridQuantity() override;
+   ~RealGridQuantity();
 
    bool init(ks_conf::Config *config) override;
 };
 
 class KPathQuantity : public Quantity<KPathBase *> {
 public:
-   ~KPathQuantity() override;
+   ~KPathQuantity();
 
    bool init(ks_conf::Config *config) override;
 };

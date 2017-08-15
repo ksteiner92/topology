@@ -37,8 +37,6 @@ template<size_t Dim> class ChernModel : public TopologicalInvariantBaseModel<Dim
    typedef TopologicalInvariantBaseModel<Dim> super;
 MODEL(ChernModel)
 public:
-   ChernModel();
-
    void operator()(std::ostream &output) override;
 };
 

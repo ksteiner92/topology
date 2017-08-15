@@ -37,10 +37,9 @@ namespace ks {
 
 template<size_t Dim> class TopologicalInvariantBaseModel : public Model {
 public:
-   TopologicalInvariantBaseModel() {
+   virtual bool init(QuantityHandler* quanHandler) override {
       tb_alg = new TightBindingAlgorithm<Dim>();
       grid_alg = new GridAlgorithm<Dim, Eigen::MatrixXcd, Eigen::Vector3d>(tb_alg);
-      QuantityHandler *quanHandler = QuantityHandler::get();
       num_atoms = quanHandler->getValue<ks_hr::TightBindingHamiltonian *>("hr")->getNumAtoms();
       size = getGridVolume<Dim>(quanHandler->getValue<RealGrid *>("rgrid")->getGridSize<Dim>())
              * num_atoms;
@@ -48,6 +47,7 @@ public:
       if (kdens % 2 == 0)
          throw "Size of k-grid must be odd to include time reverse invariant points";
       bz = quanHandler->getValue<ks_hr::TightBindingHamiltonian *>("hr")->getBZ();
+      return true;
    }
 
    virtual ~TopologicalInvariantBaseModel() {

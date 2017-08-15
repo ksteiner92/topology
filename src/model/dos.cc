@@ -29,14 +29,14 @@ using namespace ks_sw;
 
 namespace ks {
 
-template<size_t Dim> DensityOfStatesModel<Dim>::DensityOfStatesModel() {
+template<size_t Dim> bool DensityOfStatesModel<Dim>::init(QuantityHandler* quanHandler) {
    tb_alg = new TightBindingAlgorithm<Dim>();
    grid_alg = new GridAlgorithm<Dim, MatrixXcd, Vector3d>(tb_alg);
-   QuantityHandler *quanHandler = QuantityHandler::get();
    size = getGridVolume<Dim>(quanHandler->getValue<RealGrid *>("rgrid")->getGridSize<Dim>())
           * quanHandler->getValue<TightBindingHamiltonian *>("hr")->getNumAtoms();
    kpath = quanHandler->getValue<KPathBase *>("kpath");
    sw = quanHandler->getValue<SelfEnergyBase *>("sw");
+   return true;
 }
 
 template<size_t Dim> DensityOfStatesModel<Dim>::~DensityOfStatesModel() {

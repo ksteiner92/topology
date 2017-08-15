@@ -29,9 +29,6 @@ using namespace Eigen;
 
 namespace ks {
 
-template<size_t Dim> ChernModel<Dim>::ChernModel() : TopologicalInvariantBaseModel<Dim>() {
-}
-
 template<size_t Dim> void ChernModel<Dim>::operator()(std::ostream &output) {
    throw logic_error("Chern model for dimension != 2 not yet implemented");
 }

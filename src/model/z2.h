@@ -29,6 +29,7 @@
 #include "modelfactory.h"
 #include "model.hh"
 #include "topinv.hh"
+#include "logger.h"
 
 namespace ks {
 
@@ -36,7 +37,7 @@ template<size_t Dim> class Z2Model : public TopologicalInvariantBaseModel<Dim> {
    typedef TopologicalInvariantBaseModel<Dim> super;
 MODEL(Z2Model)
 public:
-   Z2Model();
+   bool init(QuantityHandler* quanHandler) override;
 
    void operator()(std::ostream &output) override;
 

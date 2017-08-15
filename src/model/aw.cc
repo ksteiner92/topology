@@ -28,18 +28,18 @@ using namespace ks_hr;
 
 namespace ks {
 
-template<size_t Dim> BaseSpectralFunctionModel<Dim>::BaseSpectralFunctionModel() {
+template<size_t Dim> bool BaseSpectralFunctionModel<Dim>::init(QuantityHandler *quanHandler) {
    tb_alg = new TightBindingAlgorithm<Dim>();
    sw_alg = new SelfEnergyAlgorithm<Dim>();
    grid_alg_tb = new GridAlgorithm<Dim, MatrixXcd, Vector3d>(tb_alg);
    grid_alg_sw = new GridAlgorithm<Dim, MatrixXcd, size_t>(sw_alg);
-   QuantityHandler *quanHandler = QuantityHandler::get();
    const array<size_t, Dim> grid_size = quanHandler->getValue<RealGrid *>("rgrid")->getGridSize<Dim>();
    num_atoms = quanHandler->getValue<TightBindingHamiltonian *>("hr")->getNumAtoms();
    size = getGridVolume<Dim>(grid_size) * num_atoms;
    kpath = quanHandler->getValue<KPathBase *>("kpath");
    idelta = quanHandler->getValue<double>("idelta");
    sw = quanHandler->getValue<SelfEnergyBase *>("sw");
+   return true;
 }
 
 template<size_t Dim> BaseSpectralFunctionModel<Dim>::~BaseSpectralFunctionModel() {

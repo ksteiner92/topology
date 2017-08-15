@@ -59,6 +59,8 @@ private:
 
 #define LOG_INFO LOG << LogLevel::INFO
 
+#define LOG_ERR LOG << LogLevel::ERROR
+
 #define LOG_WITH_TIME(MSG)\
    Logger::get() << __TIME__ << ": " << MSG;
 

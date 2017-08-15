@@ -25,6 +25,8 @@
 
 #include <iostream>
 
+#include "quan/quantityhandler.h"
+
 namespace ks {
 
 /**
@@ -46,6 +48,12 @@ public:
       return name;
    }
 
+   /**
+    * Init function
+    *
+    *
+    */
+   virtual bool init(QuantityHandler* quanHandler) = 0;
    /**
     * Pure virtual operator. In this function each model
     * implements it's magic.

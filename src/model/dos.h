@@ -40,9 +40,9 @@ namespace ks {
 template<size_t Dim> class DensityOfStatesModel : public Model {
 MODEL(DensityOfStatesModel)
 public:
-   DensityOfStatesModel();
-
    ~DensityOfStatesModel();
+
+   bool init(QuantityHandler *quanHandler) override;
 
    void operator()(std::ostream &output) override;
 

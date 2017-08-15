@@ -28,13 +28,13 @@ using namespace ks_hr;
 
 namespace ks {
 
-template<size_t Dim> BandStructureModel<Dim>::BandStructureModel() {
+template<size_t Dim> bool BandStructureModel<Dim>::init(QuantityHandler *quanHandler) {
    tb_alg = new TightBindingAlgorithm<Dim>();
    grid_alg = new GridAlgorithm<Dim, MatrixXcd, Vector3d>(tb_alg);
-   QuantityHandler *quanHandler = QuantityHandler::get();
    size = getGridVolume<Dim>(quanHandler->getValue<RealGrid *>("rgrid")->getGridSize<Dim>())
           * quanHandler->getValue<TightBindingHamiltonian *>("hr")->getNumAtoms();
    kpath = quanHandler->getValue<KPathBase *>("kpath");
+   return true;
 }
 
 template<size_t Dim> BandStructureModel<Dim>::~BandStructureModel() {
@@ -92,9 +92,12 @@ template<size_t Dim> void BandStructureModel<Dim>::operator()(
       output << i << " " << ek[i].transpose().format(printFmt) << endl;
 }
 
-template<size_t Dim> RealSwBandStructureModel<Dim>::RealSwBandStructureModel() : BandStructureModel<Dim>() {
+template<size_t Dim> bool RealSwBandStructureModel<Dim>::init(QuantityHandler* quanHandler) {
+   if (!BandStructureModel<Dim>::init(quanHandler))
+      return false;
    sw_alg = new SelfEnergyAlgorithm<Dim>();
    grid_sw_alg = new GridAlgorithm<Dim, MatrixXcd, size_t>(sw_alg);
+   return true;
 }
 
 template<size_t Dim> RealSwBandStructureModel<Dim>::~RealSwBandStructureModel() {

@@ -43,9 +43,9 @@ namespace ks {
 
 template<size_t Dim> class BaseSpectralFunctionModel : public Model {
 public:
-   BaseSpectralFunctionModel();
-
    ~BaseSpectralFunctionModel();
+
+   bool init(QuantityHandler* quantityHandler) override;
 
    void operator()(std::ostream &output) override;
 

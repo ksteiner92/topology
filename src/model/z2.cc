@@ -29,14 +29,19 @@ using namespace Eigen;
 
 namespace ks {
 
-template<size_t Dim> Z2Model<Dim>::Z2Model() {
-   if (super::size % 2 != 0)
-      throw logic_error("Number of bands must be even!");
+template<size_t Dim> bool Z2Model<Dim>::init(QuantityHandler* quanHandler) {
+   if (!super::init(quanHandler))
+      return false;
+   if (super::size % 2 != 0) {
+      LOG_ERR << "Number of bands must be even!";
+      return false;
+   }
    NSy = MatrixXcd::Zero(super::size, super::size);
    for (size_t i = 0; i < super::size / 2; i++) {
       NSy(i, i + super::size / 2) = -1i;
       NSy(i + super::size / 2, i) = 1i;
    }
+   return true;
 }
 
 template<size_t Dim> const complex<double> Z2Model<Dim>::U(
